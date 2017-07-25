@@ -6,7 +6,16 @@ const fs = Promise.promisifyAll(require('fs'));
 
 class Pj {
 	constructor(path) {
-		this._data = {};
+		try {
+			this._data = JSON.parse(fs.readFileSync(path, {encoding: 'utf8'}));
+		} catch (e) {
+			if (e.code === 'ENOENT') {
+				this._data = {};
+				fs.writeFileSync(path, '{}');
+			} else {
+				throw e;
+			}
+		}
 	}
 
 	_getPath(...property) {
@@ -32,8 +41,11 @@ class Pj {
 	}
 
 	get(...property) {
-		const path = this._getPath(...property);
-		return path.reduce((f, p) => (f || {})[p], this._data);
+		if (property.length > 0) {
+			const path = this._getPath(...property);
+			return path.reduce((f, p) => (f || {})[p], this._data);
+		}
+		return this._data;
 	}
 	set(...property) {
 		const value = property.pop();

@@ -1,2 +1,7 @@
 node_modules
+test.json
+test.*.json
 
+coverage
+.nyc_output
+test.json

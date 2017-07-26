@@ -1,8 +1,6 @@
-const Promise = require('bluebird');
-
 const _ = require('lodash');
 const debug = require('debug')('pj');
-const fs = Promise.promisifyAll(require('fs'));
+const fs = require('fs');
 
 class Pj {
 	constructor(path) {

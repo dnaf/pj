@@ -1,7 +1,17 @@
 {
-  "name": "pjdb",
+  "name": "pj-db",
+  "version": "0.0.1",
+  "description": "Weird work-in-progress persistent JSON thing",
+  "keywords": [
+    "persistent",
+    "json",
+    "persist",
+    "persistence"
+  ],
+  "bugs": "https://github.com/dnaf/pj/issues",
+  "license": "MIT",
+  "repository": "dnaf/pj",
   "dependencies": {
-    "bluebird": "^3.5.0",
     "debug": "^2.6.8",
     "lodash": "^4.17.4"
   },

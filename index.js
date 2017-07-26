@@ -26,7 +26,8 @@ class Pj {
 			// TODO: rather than just serializing all of the data and writing it all at once, look into just updating the fields that were modified.
 			// It'd probably be too tough to figure out with plain JSON, but from what I've read, it should be pretty simple to do with BSON and maybe
 			// msgpack.
-			return fs.writeFileSync(this._filePath, JSON.stringify(this._data));
+			fs.writeFileSync(this._filePath, JSON.stringify(this._data));
+			this._modified = [];
 		}
 	}
 

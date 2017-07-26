@@ -6,6 +6,8 @@ const fs = Promise.promisifyAll(require('fs'));
 
 class Pj {
 	constructor(path) {
+		this._modified = [];
+		this._filePath = path;
 		try {
 			this._data = JSON.parse(fs.readFileSync(path, {encoding: 'utf8'}));
 		} catch (e) {
@@ -15,6 +17,18 @@ class Pj {
 			} else {
 				throw e;
 			}
+		}
+		this.updateInterval = setInterval(() => { this._update() }, 2000);
+		process.on("exit", () => { return this._update() });
+	}
+
+	_update() {
+		if (this._modified.length > 0) {
+			debug("Data has changed; writing to disk");
+			// TODO: rather than just serializing all of the data and writing it all at once, look into just updating the fields that were modified.
+			// It'd probably be too tough to figure out with plain JSON, but from what I've read, it should be pretty simple to do with BSON and maybe
+			// msgpack.
+			return fs.writeFileSync(this._filePath, JSON.stringify(this._data));
 		}
 	}
 
@@ -54,9 +68,11 @@ class Pj {
 			if (i < a.length - 1) { // If this isn't the last value in the array
 				if (!f[p]) {
 					f[p] = {};
+					this._modified.push(_.take(a, i + 1));
 				} // Make sure we're set to something
 				return f[p]; // Return ourselves
 			} // Otherwise
+			this._modified.push(a);
 			return f[p] = value;
 		}, this._data);
 	}
